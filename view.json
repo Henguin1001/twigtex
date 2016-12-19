@@ -1,0 +1,15 @@
+{
+  "quiz":[
+    {
+      "prompt":"Solve for x",
+      "options":[
+        3,4,1,3
+      ]
+    },{
+      "prompt":"Solve for y",
+      "options":[
+        "$\\frac{1}{2}x$","x","c","All of the above"
+      ]
+    }
+  ]
+}

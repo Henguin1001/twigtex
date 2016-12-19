@@ -1,0 +1,20 @@
+{
+  "name": "latexengine",
+  "version": "1.0.0",
+  "description": "Templating language for latex with tools",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Henry Troutman",
+  "license": "ISC",
+  "dependencies": {
+    "async": "^2.1.4",
+    "colors": "^1.1.2",
+    "gravatar": "^1.6.0",
+    "mathjs": "^3.8.0",
+    "request": "^2.79.0",
+    "sync-request": "^3.0.1",
+    "twig": "^0.10.3"
+  }
+}

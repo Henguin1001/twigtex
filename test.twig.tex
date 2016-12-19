@@ -1,0 +1,17 @@
+\documentclass{article}
+\usepackage{graphicx}
+\begin{document}
+
+{% for i in 0..4%}
+{% set r  = random(1,5)%}
+  \[ f(x) =
+  {% for j in r..1%}
+    {%if j != r%}
+      +
+    {% endif %}
+      {{random(1,20)}}x {% if j != 1 %} ^{ {{j}} }{% endif %}
+  {% endfor %}
+  \]
+{% endfor %}
+
+\end{document}

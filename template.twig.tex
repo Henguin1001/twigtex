@@ -1,0 +1,84 @@
+\documentclass{article}
+\usepackage{graphicx}
+\begin{document}
+
+\section{Local JSON File}
+\label{sec:Local JSON File}
+\begin{verbatim}
+{
+ "quiz":[
+    {
+       "prompt":"Solve for x",
+       "options":[
+          3,
+          4,
+          1,
+          3
+       ]
+    },
+    {
+       "prompt":"Solve for y",
+       "options":[
+          "$\\frac{1}{2}x$",
+          "x",
+          "c",
+          "All of the above"
+       ]
+    }
+ ]
+}
+\end{verbatim}
+
+OUTPUT:
+\begin{enumerate}
+  {% set view = require("./view.json") %}
+  {% for question in view.quiz %}
+    \item { {{question.prompt}} }
+    \begin{enumerate}
+      {% for option in question.options %}
+        \item {{option}}
+      {% endfor %}
+    \end{enumerate}
+  {% endfor %}
+\end{enumerate}
+
+
+\section{Online Rest API}
+\label{sec:Online Rest API}
+Fetched from the web service \textit{What does trump think}\\
+  {% for i in 0..4%}
+  {% set response = requestJSON('https://api.whatdoestrumpthink.com/api/v1/quotes/random')%}
+    \begin{quote}
+      {{response.message}}
+    \end{quote}
+    -\textit{Donald Trump}\\[2cm]
+  {% endfor %}
+
+  \section{External Images}
+  \label{sec:External Images}
+  {% set image = requestImage('http://lorempixel.com/400/200/sports/', '.jpg') %}
+  \includegraphics{{ '{' ~ image ~'}'}}
+
+
+\section{User Profile}
+\label{sec:User Profile}
+{% set email = 'henguin1001@gmail.com'%}
+{% set profile = gravatar(email) %}
+Using the \textit{gravatar} service:\\
+\textbf{Email:} {{email}}\\
+\textbf{Profile:}
+\includegraphics{{ '{' ~ profile ~'}'}}
+
+
+\section{Random generation}
+\label{sec:Random generation}
+\begin{enumerate}
+  {% for i in 0..5 %}
+    {% set problem = [random(1,5), random(1,15), random(1,10)]%}
+    \item Solve for x \[y = \frac{ {{problem[0]}} }{ {{problem[1]}} } x +
+      {{problem[2]}}
+    \]
+  {% endfor %}
+\end{enumerate}
+
+\end{document}

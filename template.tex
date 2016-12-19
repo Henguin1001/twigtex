@@ -1,0 +1,13 @@
+\documentclass{article}
+\begin{document}
+  \begin{enumerate}
+    {{#questions}}
+      \item {{{text}}}
+      \begin{enumerate}
+        {{#choices}}
+          \item {{.}}
+        {{/choices}}
+      \end{enumerate}
+    {{/questions}}
+  \end{enumerate}
+\end{document}
