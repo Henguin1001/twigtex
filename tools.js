@@ -38,11 +38,6 @@ twig.extendFunction("gravatar", function(email) {
   images.push([URL, location]);
   return "./bin/" + location;
 });
-twig.extendFunction("random", function(arr, upper) {
-  if(upper){
-    return Math.floor(Math.random() * (upper - arr + 1)) + arr;
-  } else return arr[Math.floor(Math.random()*items.length)];
-});
 
 twig.extendFilter("json_parse", function(value) {
   return JSON.parse(value);
