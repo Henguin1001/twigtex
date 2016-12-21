@@ -1,7 +1,11 @@
 \documentclass{article}
 \usepackage{graphicx}
 \begin{document}
-
-{% set table = readCSV('sample.csv')%}
-
+  \section{Random generation}
+  \label{sec:Random generation}
+  \begin{enumerate}
+        {%for i in 0..5%}
+          \item {{i}}
+        {% endfor %}
+  \end{enumerate}
 \end{document}

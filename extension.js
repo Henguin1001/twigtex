@@ -15,13 +15,18 @@ module.exports.extendFunctionAsync = function(name, fn){
   });
 };
 module.exports.loadRequests = function(cba) {
-  async.map(requests, function(request, cbb){
-    request.args.push(cbb);
-    request.fn.apply(null, request.args);
-  }, function(err, res){
-    cache = res;
-    cba(err, res);
-  });
+  if(requests.length == 0){
+    console.log("No external resources");
+    cba(null, []);
+  } else {
+    async.map(requests, function(request, cbb){
+      request.args.push(cbb);
+      request.fn.apply(null, request.args);
+    }, function(err, res){
+      cache = res;
+      cba(err, res);
+    });
+  }
 };
 module.exports.extendFunction = twig.extendFunction;
 module.exports.extendFilter = twig.extendFilter;

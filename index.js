@@ -1,42 +1,24 @@
-var twig = require('twig'),
-  fs = require('fs'),
-  spawn = require('child_process').spawn,
-  colors = require('colors');
+var compile = require('./compile.js'),
+  tools = require('./tools/'),
+  path = require('path'),
+  argv = require('minimist')(process.argv.slice(2));
 
-var extend = require('./extension.js'),
-  tools = require('./tool.js');
 
-var INPUT_FILE = './test.twig.tex', OUTPUT_FILE = './output.tex';
-compile(INPUT_FILE, function(err, tex){
+var INPUT_FILE = './'+argv._[0];
+if(argv.o){
+  OUTPUT_FILE = './'+argv.o;
+} else if (INPUT_FILE.includes('.twig')){
+  OUTPUT_FILE = INPUT_FILE.replace(/\.twig/, '');
+  if(path.extname(OUTPUT_FILE).length == 0){
+    OUTPUT_FILE+='.tex';
+  }
+} else if(path.extname(INPUT_FILE)=='.tex'){
+  OUTPUT_FILE = './output.tex';
+} else {
+  OUTPUT_FILE = OUTPUT_FILE.substr(0, OUTPUT_FILE.lastIndexOf(".")) + ".tex";
+}
+compile.compile("./test.twig.tex", function(err, tex){
   if(!err){
-    render(OUTPUT_FILE, tex);
+    compile.render("./output.tex", tex);
   } else throw err;
 });
-
-function compile(filename, cb){
-  console.log(colors.blue('Compiling '+ colors.underline('First Pass')));
-  twig.renderFile(filename, {}, (err) => {
-    console.log(colors.cyan('Loading external resources'));
-    extend.loadRequests((err, data) => {
-      if(!err){
-        console.log(colors.blue('Compiling '+ colors.underline('Second Pass')));
-        twig.renderFile(filename, {__:data}, cb);
-      } else throw err;
-    });
-  });
-}
-function render(filename, tex, cb){
-  console.log(colors.green("writing tex output to file: " + colors.underline(filename)));
-  fs.writeFileSync(filename, tex);
-  console.log(colors.blue("running pdflatex"));
-  cmd = spawn('pdflatex', [OUTPUT_FILE]);
-  cmd.stdout.pipe(process.stdout);
-  cmd.stderr.pipe(process.stderr);
-  cmd.on('close', (code) => {
-    if(code == 0){
-      console.log(colors.green("Success, pdflatex ran without error"));
-    } else throw "error code:" + code;
-    if(cb)
-      cb(code);
-  });
-}

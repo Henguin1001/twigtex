@@ -1,22 +1,11 @@
-var extend = require('./extension.js'),
+var extend = require('../extension.js'),
   fs = require('fs'),
-  request = require('request'),
-  csv = require('csv');
-var TEX_DATA = './bin/';
+  mkdirp = require('mkdirp'),
+  request = require('request');
+var TEX_DATA = './.texdata/';
 
-extend.extendFunction("require", function(filename) {
-  return require(filename);
-});
-extend.extendFunction("json_parse", function(value) {
-  return JSON.parse(value);
-});
-extend.extendFunctionAsync("readFile", function(filename, cb){
-  fs.readFile(filename, 'UTF8', cb);
-});
-extend.extendFunctionAsync("readCSVRaw", function(filename, cb){
-  fs.readFile(filename, 'UTF8', function(err, data){
-    csv.parse(data,cb);
-  });
+mkdirp(TEX_DATA, function (err) {
+    if (err) throw err;
 });
 extend.extendFunctionAsync("requestRaw", function(URL, cb){
   request(URL, function (err, response, body) {
