@@ -1,0 +1,41 @@
+{% extends 'head.twig.tex'%}
+{% block content %}
+
+
+  \section{Making Web Requests}
+  \label{sec:Making Web Requests}
+
+    \subsection{Simple Rest API}
+    \label{sub:Simple Rest API}
+      Fetched from the web service \textit{What does trump think}\\
+      {% for i in 0..4%}
+      {% set response = requestJSON('https://api.whatdoestrumpthink.com/api/v1/quotes/random')%}
+        \begin{quote}
+          {{response.message}} - \textit{Donald Trump}
+        \end{quote}
+      {% endfor %}
+
+
+    \subsection{Spotify Album API}
+    \label{sub:Spotify Album API}
+    {% set album = requestJSON("https://api.spotify.com/v1/albums/4aawyAB9vmqN3uQ7FjRGTy?market=ES") %}
+    Album: {{album.name}} \\
+    Artist: {{ album.artists[0].name}} \\
+    Label: {{ album.label }} \\
+
+    \begin{enumerate}
+          {%for track in album.tracks.items %}
+            \item {{ track.name }}\\
+            \textit{listen:}
+              \underline{ {{track.external_urls.spotify}} }
+          {% endfor %}
+    \end{enumerate}
+
+    \subsection{External Images}
+    \label{sub:External Images}
+    A random sports image from \underline{http://lorempixel.com/400/200/sports/}\\
+    {% set image = requestImage('http://lorempixel.com/400/200/sports/', '.jpg') %}
+    \includegraphics{{ '{' ~ image ~'}'}}
+
+
+{% endblock %}
