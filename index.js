@@ -17,8 +17,10 @@ if(argv.o){
 } else {
   OUTPUT_FILE = OUTPUT_FILE.substr(0, OUTPUT_FILE.lastIndexOf(".")) + ".tex";
 }
-compile.compile("./test.twig.tex", function(err, tex){
+compile.compile(INPUT_FILE, OUTPUT_FILE, function(err, tex){
   if(!err){
-    compile.render("./output.tex", tex);
+    if(!argv.c){
+      compile.render(OUTPUT_FILE);
+    }
   } else throw err;
 });
