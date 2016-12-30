@@ -18,8 +18,8 @@ module.exports.quiet = function(){
 
 }
 module.exports.err = function(err, details){
-  console.err(err);
-  console.log('\t' + colors.error(details));
+  console.log(colors.error(details));
+  throw err;
 }
 module.exports.info = function(details){
   if(Array.isArray(details)){

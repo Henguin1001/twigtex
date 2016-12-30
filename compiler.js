@@ -41,11 +41,18 @@ function compileFiles(files, cb){
     compileFile(file[0], function(err, body){
       if(err) next(err, !!err);
       else {
-        console.log(file[1]);
         fs.writeFile(file[1], body, next);
       }
     });
-  }, cb);
+  }, function(err, arr){
+    if(err){
+      cb(err);
+    } else if(arr.length > 0){
+      cb("Error Compiling Files");
+    } else{
+      cb(null);
+    }
+  });
 }
 
 module.exports.compileFile = compileFile;
@@ -53,11 +60,11 @@ module.exports.compileFiles = compileFiles;
 module.exports.compile = function(program, cb) {
   logger.debug(["Compiling File(s):", program.task]);
   if(program.concat){
-    compileFileConcat(program.args, program.concat, program.task[0][1], function(err){
+    compileFileConcat(program.args, program.concat, program.output[0], function(err){
       if(err) throw err;
       else {
         logger.success("Compiled Successfully");
-        cb(null);
+        cb(null, program);
       }
     });
   } else {
@@ -65,7 +72,7 @@ module.exports.compile = function(program, cb) {
       if(err) throw err;
       else {
         logger.success("Compiled Successfully");
-        cb(null);
+        cb(null, program);
       }
     });
   }

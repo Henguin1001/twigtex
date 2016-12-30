@@ -13,13 +13,15 @@ function filesExist(files, cb){
       next(err, !!err);
     });
   }, (err, output)=>{
-    if(output.length!=0){
-      logger.err(err, ['input files not found', output]);
-    } else {
+    if(err==null){
       logger.info('All Files Exist');
       logger.debug(['Files Exist:', files])
+      cb(null);
+    } else if(err.code == 'ENOENT') {
+      logger.err(err, ['input files not found', output]);
+    } else {
+      cb(err);
     }
-    cb(err);
   });
 }
 // A function that finds an output file to write to given an input file
@@ -81,8 +83,9 @@ module.exports = function(cb){
       }, function(next){
         // Generate a list of output file directives
         if(program.concat){
-           program.output = program.output | outputName(program.args[0]);
+           program.output = [program.output | outputName(program.args[0])];
         } else{
+          program.output = program.args.map(outputName);
           program.task = program.args.map(function(filein){
             return [filein, outputName(filein)];
           });
