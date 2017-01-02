@@ -2,7 +2,7 @@ var path = require('path'),
     fs = require('fs'),
     async = require('async'),
     mkdirp = require('mkdirp'),
-    logger = require('./logger.js');
+    winston = require('winston');
     compiler = require('./compiler.js');
 
 // A function to test if a array of files exists
@@ -14,11 +14,11 @@ function filesExist(files, cb){
     });
   }, (err, output)=>{
     if(err==null){
-      logger.info('All Files Exist');
-      logger.debug(['Files Exist:', files])
+      winston.info('All Files Exist');
+      winston.log('debug', 'All Files Exist:')
       cb(null);
     } else if(err.code == 'ENOENT') {
-      logger.err(err, ['input files not found', output]);
+      winston.error('input files not found');
     } else {
       cb(err);
     }
@@ -54,8 +54,9 @@ var program = require('commander');
 program
   .version('0.0.1')
   .usage('[options] <file ...>')
-  .option('-q, --quiet', 'Supress stdout', logger.quiet)
-  .option('-v, --verbose', 'Output additional information to stdout', logger.verbose)
+  .option('-q, --quiet', 'Supress stdout')
+  .option('-v, --verbose', 'Output additional information to stdout')
+  .option('-c, --compile', 'Only compile without running pdflatex')
   .option('-O, --Ouput [directory]', 'Specify output directory')
   .option('-i, --image [directory]', 'Specify directory where resources are saved [.texdata/]', './.texdata/')
   .option('-o, --output [filename]', 'Specify output file', function(output){
@@ -73,8 +74,8 @@ module.exports = function(cb){
       function(next) {
         // Ensure there is a directory to write images to
         mkdirp(program.image,  (err)=>{
-          if (err) logger.err(err, ['When creating image directory', program.image]);
-          else logger.info(['image directory created', program.image]);
+          if (err) winston.error('When creating image directory', err);
+          else winston.info('image directory created');
           next(err);
         });
       }, function(next){
@@ -102,7 +103,7 @@ module.exports = function(cb){
       }
   ], function(err){
     if(!err){
-      logger.success("program loaded");
+      winston.info("Success program loaded");
       cb(null, program);
     } else throw err;
 

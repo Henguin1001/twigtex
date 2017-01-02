@@ -1,6 +1,6 @@
 var async = require('async'),
   fs = require('fs'),
-  logger = require('./logger.js'),
+  winston = require('winston'),
   twig = require('twig'),
   extend = require('./extension.js');
 
@@ -10,21 +10,20 @@ var async = require('async'),
 function compileFile(filein, cb){
   async.waterfall([
       function renderTwigOnce(next){
-        logger.info(["Compiling","First pass"]);
+        winston.info("Compiling First pass");
         twig.renderFile(filein, {}, function(err) {
-          if(err) logger.err(err, ["Error compiling on first pass"]);
+          if(err) winston.error("Error compiling on first pass", err);
           next(err);
         });
       }, function loadRequests(next){
-        logger.info("Loading external resources");
         extend.loadRequests(function(err, data){
-          if(err) logger.err(err, ["Error loading requests"]);
+          if(err) winston.error("Error loading requests" , err);
           next(err,data);
         });
       }, function renderFileTwice(data, next){
-          logger.info(["Compiling", "Second pass"]);
+          winston.info("Compiling Second pass");
           twig.renderFile(filein, {__:data}, function(err, res){
-            if(err) logger.err(err, ["Error compiling on second pass"]);
+            if(err) winston.error("Error compiling on second pass", err);
             extend.clearRequests();
             next(err, res);
           });
@@ -59,12 +58,12 @@ function compileFiles(files, cb){
 module.exports.compileFile = compileFile;
 module.exports.compileFiles = compileFiles;
 module.exports.compile = function(program, cb) {
-  logger.debug(["Compiling File(s):", program.task]);
+  winston.debug("Compiling File(s):", program.args);
   if(program.concat){
     compileFileConcat(program.args, program.concat, program.output[0], function(err){
       if(err) throw err;
       else {
-        logger.success("Compiled Successfully");
+        winston.info("Compiled Successfully");
         cb(null, program);
       }
     });
@@ -72,7 +71,7 @@ module.exports.compile = function(program, cb) {
     compileFiles(program.task, function(err){
       if(err) throw err;
       else {
-        logger.success("Compiled Successfully");
+        winston.info("Compiled Successfully");
         cb(null, program);
       }
     });
