@@ -31,5 +31,10 @@ module.exports.loadRequests = function(cba) {
     });
   }
 };
+module.exports.clearRequests = function(){
+  requests = [];
+  cache = [];
+  cacheIterator = 0;
+}
 module.exports.extendFunction = twig.extendFunction;
 module.exports.extendFilter = twig.extendFilter;

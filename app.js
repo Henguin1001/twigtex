@@ -34,7 +34,6 @@ function outputName(filename){
   //  if the filename no longer has an extension, add .tex
   // if it only has the extension .tex to avoid overwritting the name not the extension must be changed
   // Otherwise just change the extension to .tex
-  // TODO: Clean up this Code
   if (filename.includes('.twig')){
     filename = filename.replace(/\.twig/, '');
     if(path.extname(filename).length === 0){
@@ -57,12 +56,15 @@ program
   .usage('[options] <file ...>')
   .option('-q, --quiet', 'Supress stdout', logger.quiet)
   .option('-v, --verbose', 'Output additional information to stdout', logger.verbose)
-  .option('-o, --output [filename]', 'Specify output file')
+  .option('-O, --Ouput [directory]', 'Specify output directory')
+  .option('-i, --image [directory]', 'Specify directory where resources are saved [.texdata/]', './.texdata/')
+  .option('-o, --output [filename]', 'Specify output file', function(output){
+    return [output];
+  })
   .option('-c, --concat [delimeter]', 'Concatenate output of multiple files joined by delimeter [ ]', function(cmd){
     if(cmd) return ' ';
     else return cmd;
   }, false)
-  .option('-i, --image [directory]', 'Specify directory where resources are saved [.texdata/]', './.texdata/')
   .parse(process.argv);
 
 module.exports = function(cb){
@@ -83,12 +85,18 @@ module.exports = function(cb){
       }, function(next){
         // Generate a list of output file directives
         if(program.concat){
-           program.output = [program.output | outputName(program.args[0])];
+           program.output = program.output || [outputName(program.args[0])];
         } else{
-          program.output = program.args.map(outputName);
+          program.output = program.output || program.args.map(outputName);
           program.task = program.args.map(function(filein){
             return [filein, outputName(filein)];
           });
+        }
+        program.latex = program.output.map(function(file){
+          return path.relative(__dirname, file);
+        });
+        if(program.Ouput){
+          program.latex.push('-output-directory ' + program.Output);
         }
         next(null);
       }

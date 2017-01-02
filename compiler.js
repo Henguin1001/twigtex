@@ -25,6 +25,7 @@ function compileFile(filein, cb){
           logger.info(["Compiling", "Second pass"]);
           twig.renderFile(filein, {__:data}, function(err, res){
             if(err) logger.err(err, ["Error compiling on second pass"]);
+            extend.clearRequests();
             next(err, res);
           });
       }
@@ -37,7 +38,7 @@ function compileFilesConcat(filesin, delimeter, fileout, cb){
   });
 }
 function compileFiles(files, cb){
-  async.filter(files, function(file, next){
+  async.filterSeries(files, function(file, next){
     compileFile(file[0], function(err, body){
       if(err) next(err, !!err);
       else {
