@@ -2,7 +2,7 @@ var path = require('path'),
     fs = require('fs'),
     async = require('async'),
     mkdirp = require('mkdirp'),
-    winston = require('winston');
+    winston = require('winston'),
     compiler = require('./compiler.js');
 
 // A function to test if a array of files exists

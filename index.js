@@ -5,11 +5,8 @@ var async = require('async'),
   compiler = require('./compiler.js'),
   winston = require('winston'),
   tools = require('./tools/');
-winston.level = 'debug';
-winston.addColors({
-  info:'blue',
-  debug:'cyan'
-});
+winston.level = 'info';
+
 async.waterfall([
     app,
     compiler.compile,

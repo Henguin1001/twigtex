@@ -1,0 +1,34 @@
+{# A very abrievated example of the twig templating language #}
+{# Check out their website for more information #}
+{% extends 'head.twig.tex'%}
+
+{% block content %}
+{# This is the content between the begin{document} and end{document} #}
+  \section{Control Structures}
+  \begin{enumerate}
+    {# A loop from 1 to 5 #}
+    {% for i in 1..10 %}
+        \item
+        {% if i % 2 == 0 %} {# A simple check for if the index "i" is even  #}
+          {{ i }}
+        {% else %}
+          {{ random(i) }}
+        {% endif %}
+
+    {% endfor %}
+  \end{enumerate}
+
+  \section{Macros}
+    {% macro listValues(arr) %}
+      \begin{itemize}
+        {% for item in arr %}
+          \item {{item}}
+        {% endfor %}
+      \end{itemize}
+    {% endmacro %}
+    {# Macros can only be used by importing them from a file #}
+    {# In this case it is the current file "_self" #}
+    {% import _self as myMac %}
+    {{ myMac.listValues([2,4,10,5,3]) }}
+
+{% endblock %}
