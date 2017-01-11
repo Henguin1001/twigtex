@@ -3,6 +3,7 @@ var path = require('path'),
     async = require('async'),
     mkdirp = require('mkdirp'),
     winston = require('winston'),
+    minimist = require('minimist'),
     compiler = require('./compiler.js');
 
 // A function to test if a array of files exists
@@ -100,6 +101,11 @@ module.exports = function(cb){
           program.latex.push('-output-directory ' + program.Output);
         }
         next(null);
+      }, function(next){
+        program.templateGlobal = [];
+        program.templateGlobal.args = minimist(process.argv.slice(2));
+
+        next(null)
       }
   ], function(err){
     if(!err){

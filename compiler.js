@@ -7,11 +7,11 @@ var async = require('async'),
 // In order for async functions to be used the program renders once to
 // become aware of the requests needed, It loads those requests and places them
 // as plain text in the documention when rendered the second time
-function compileFile(filein, cb){
+function compileFile(filein, globals, cb){
   async.waterfall([
       function renderTwigOnce(next){
         winston.info("Compiling First pass");
-        twig.renderFile(filein, {}, function(err) {
+        twig.renderFile(filein, globals, function(err) {
           if(err) winston.error("Error compiling on first pass", err);
           next(err);
         });
@@ -22,7 +22,8 @@ function compileFile(filein, cb){
         });
       }, function renderFileTwice(data, next){
           winston.info("Compiling Second pass");
-          twig.renderFile(filein, {__:data}, function(err, res){
+          globals.cache = data;
+          twig.renderFile(filein, {__:globals}, function(err, res){
             if(err) winston.error("Error compiling on second pass", err);
             extend.clearRequests();
             next(err, res);
@@ -36,9 +37,9 @@ function compileFilesConcat(filesin, delimeter, fileout, cb){
     fs.writeFile(fileout, arr.join(delimeter), cb);
   });
 }
-function compileFiles(files, cb){
+function compileFiles(files, globals, cb){
   async.filterSeries(files, function(file, next){
-    compileFile(file[0], function(err, body){
+    compileFile(file[0], globals, function(err, body){
       if(err) next(err, !!err);
       else {
         fs.writeFile(file[1], body, next);
@@ -68,7 +69,7 @@ module.exports.compile = function(program, cb) {
       }
     });
   } else {
-    compileFiles(program.task, function(err){
+    compileFiles(program.task, program.templateGlobal, function(err){
       if(err) throw err;
       else {
         winston.info("Compiled Successfully");

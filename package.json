@@ -6,9 +6,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "repository":{
-    "type":"git",
-    "url":"https://github.com/Henguin1001/twigtex.git"
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Henguin1001/twigtex.git"
   },
   "author": "Henry Troutman",
   "license": "ISC",
@@ -19,6 +19,7 @@
     "csv": "^1.1.0",
     "gravatar": "^1.6.0",
     "mathjs": "^3.8.0",
+    "minimist": "^1.2.0",
     "mkdirp": "^0.5.1",
     "request": "^2.79.0",
     "sync-request": "^3.0.1",

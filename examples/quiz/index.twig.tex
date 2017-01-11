@@ -1,0 +1,7 @@
+{% extends 'head.tex' %}
+
+{% block content %}
+{% for i in 0..(__.args.count) %}
+    {{random(10)}}
+  {% endfor %}
+{% endblock %}
