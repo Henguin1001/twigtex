@@ -70,8 +70,11 @@ program
   .parse(process.argv);
 
 module.exports = function(cb){
-  // Do some checks and format the command line information
-  async.waterfall([
+  if(program.args.length == 0){
+    winston.warn("no files specified");
+  } else {
+    // Do some checks and format the command line information
+    async.waterfall([
       function(next) {
         // Ensure there is a directory to write images to
         mkdirp(program.image,  (err)=>{
@@ -87,7 +90,7 @@ module.exports = function(cb){
       }, function(next){
         // Generate a list of output file directives
         if(program.concat){
-           program.output = program.output || [outputName(program.args[0])];
+          program.output = program.output || [outputName(program.args[0])];
         } else{
           program.output = program.output || program.args.map(outputName);
           program.task = program.args.map(function(filein){
@@ -107,11 +110,12 @@ module.exports = function(cb){
 
         next(null)
       }
-  ], function(err){
-    if(!err){
-      winston.info("Success program loaded");
-      cb(null, program);
-    } else throw err;
+    ], function(err){
+      if(!err){
+        winston.info("Success program loaded");
+        cb(null, program);
+      } else throw err;
 
-  });
+    });
+  }
 };
