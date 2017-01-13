@@ -1,9 +1,13 @@
 {
   "name": "twigtex",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Twig templating language combined with latex and additional tools",
-  "main": "index.js",
+  "main": "lib/twigtex.js",
+  "bin": {
+    "twigtex": "bin/twigtex.js"
+  },
   "scripts": {
+    "start":"node bin/twigtex.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -24,9 +28,6 @@
     "request": "^2.79.0",
     "twig": "^0.10.3",
     "winston": "^2.3.0"
-  },
-  "bin": {
-    "twigtex": "./index.js"
   },
   "preferGlobal": "true",
   "devDependencies": {

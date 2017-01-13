@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 var async = require('async'),
   winston = require('winston'),
   mkdirp = require('mkdirp'),
