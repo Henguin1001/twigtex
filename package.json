@@ -7,7 +7,7 @@
     "twigtex": "bin/twigtex.js"
   },
   "scripts": {
-    "start":"node bin/twigtex.js",
+    "start": "node bin/twigtex.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -31,6 +31,8 @@
   },
   "preferGlobal": "true",
   "devDependencies": {
-    "mocha": "^3.2.0"
+    "mocha": "^3.2.0",
+    "mock-fs": "^4.0.0-beta.1",
+    "rewire": "^2.5.2"
   }
 }
