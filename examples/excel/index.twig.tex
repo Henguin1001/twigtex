@@ -1,0 +1,8 @@
+{% extends 'head.twig.tex' %}
+{% block content %}
+{% set table = excel(readCSV("file")) %}
+\begin{tabular}{  l c r  }
+  table.cell("A1") & table.cell("B1") & table.formula("A1 + A2") \\
+  
+\end{tablular}
+{% endblock %}
